@@ -22,9 +22,14 @@ namespace Assets.HomeworksPM.Scripts.MySctripts
 
         private IPopupPresentationModel _pm;
 
-        private void Start()
+        private void OnEnable()
         {
+            AddListners();
             Show();
+        }
+        private void OnDisable()
+        {
+            RemoveListners();
         }
 
         [Inject]
@@ -41,10 +46,19 @@ namespace Assets.HomeworksPM.Scripts.MySctripts
             _awatar.sprite = _pm.GetAwatar();
             _progress.value = _pm.GetProgress();
 
-            UpdateStatsElements(_pm.GetStatsReview());
+            UpdateStatsElements(_pm.GetStatsReview());       
+        }
 
+        private void AddListners()
+        {
+            _pm.OnButtonStateChanged += OnButtonStateChanged;
+            _levelUp.onClick.AddListener(() => OnButtonClicked());
+        }
 
-            _pm.OnStateChanged += OnButtonStateChanged;
+        private void RemoveListners()
+        {
+            _pm.OnButtonStateChanged -= OnButtonStateChanged;
+            _levelUp.onClick.RemoveListener(() => OnButtonClicked());
         }
 
 
@@ -56,9 +70,9 @@ namespace Assets.HomeworksPM.Scripts.MySctripts
             }
         }
 
-        private void OnButtonStateChanged()
+        private void OnButtonStateChanged(bool isOn)
         {
-            _levelUp.interactable =_pm.LevelActive();
+            _levelUp.interactable = isOn;
         }
 
         private void OnButtonClicked()

@@ -6,27 +6,25 @@ using Zenject;
 
 public class PopUpPresentationModel : IPopupPresentationModel
 {
-    public event Action OnStateChanged;
+    public event Action<bool> OnButtonStateChanged;
+    public event Action OnButtonClicked;
 
     private Lessons.Architecture.PM.CharacterInfo _characterInfo;  
     private PlayerLevel _playerLevel;
     private UserInfo _userInfo;
 
-    private CharacterStat _currentStat;
     private Sprite _currentUserAwatar;
     private string _currentName;
     private string _currentDescription;
     private int _progress;
-    private bool _levelUp = false;
 
     public void Start()
     {
-        _characterInfo.OnStatAdded += OnChangeStat;
         _userInfo.OnDescriptionChanged += OnUserDescriptionChanged;
         _userInfo.OnNameChanged += OnUserNameChanged;
         _userInfo.OnIconChanged += OnAwatarChanged;
         _playerLevel.OnExperienceChanged += OnProgressChanged;
-        _playerLevel.OnLevelUp += LevelUp;
+        _playerLevel.OnLevelUp += OnLevelUp;
     }
    
     [Inject]
@@ -39,19 +37,16 @@ public class PopUpPresentationModel : IPopupPresentationModel
         Start(); //убрать 
     }
 
-    private void LevelUp()
+    private void OnLevelUp()
     {
-        _levelUp = true;
+        OnButtonStateChanged?.Invoke(true);
     }
 
     private void OnProgressChanged(int progress)
     {
         _progress = progress;
     }
-    private void OnChangeStat(CharacterStat stat)
-    {
-        _currentStat = stat;
-    }
+    
 
     private void OnAwatarChanged(Sprite awatar)
     {
@@ -85,24 +80,23 @@ public class PopUpPresentationModel : IPopupPresentationModel
         return _currentName;
     }
 
-
-    public bool LevelActive()
-    {
-        return _levelUp;
-    }
-
     public void OnButtonLevelClicked()
     {
-        Debug.Log("Уровень повышен");
+        OnButtonClicked?.Invoke();
+        Debug.Log("Кнопка уровень повышен нажата");
     }
 
 
     public string[] GetStatsReview()
     {
         var massData = new string[6];
-        for(var i = 0; i< massData.Length; i++)
+        CharacterStat[] stats = _characterInfo.GetStats();
+
+        for (var i = 0; i< massData.Length; i++)
         {
-            massData[i] = _currentStat.Name + " " + _currentStat.Value;
+            if (i >= stats.Length)
+                break;
+            massData[i] = stats[i].Name + " " + stats[i].Value;
         }
         return massData;
     }
@@ -114,6 +108,6 @@ public class PopUpPresentationModel : IPopupPresentationModel
 
     public string GetLevel()
     {
-        return _playerLevel.CurrentLevel.ToString();
+        return "Level: " + _playerLevel.CurrentLevel.ToString();
     }
 }

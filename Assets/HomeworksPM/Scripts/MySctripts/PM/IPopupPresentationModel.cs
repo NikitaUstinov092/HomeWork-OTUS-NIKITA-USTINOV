@@ -10,11 +10,11 @@ namespace Assets.HomeworksPM.Scripts.MySctripts
         string GetDescription();     
         float GetProgress();
         Sprite GetAwatar();
-        bool LevelActive();  
         void OnButtonLevelClicked();
         string[] GetStatsReview();
  
-        event Action OnStateChanged; 
+        event Action<bool> OnButtonStateChanged;
+        event Action OnButtonClicked;
     }
 
 
