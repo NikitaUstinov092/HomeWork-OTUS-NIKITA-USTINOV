@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
-using UnityEngine;
+
 
 namespace Lessons.Architecture.PM
 {
-    public sealed class CharacterInfo : MonoBehaviour
+    public sealed class CharacterInfo 
     {
         public event Action<CharacterStat> OnStatAdded;
         public event Action<CharacterStat> OnStatRemoved;

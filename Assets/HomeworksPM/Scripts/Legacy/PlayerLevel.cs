@@ -1,10 +1,10 @@
 using System;
 using Sirenix.OdinInspector;
-using UnityEngine;
+
 
 namespace Lessons.Architecture.PM
 {
-    public sealed class PlayerLevel : MonoBehaviour
+    public sealed class PlayerLevel 
     {
         public event Action OnLevelUp;
         public event Action<int> OnExperienceChanged;

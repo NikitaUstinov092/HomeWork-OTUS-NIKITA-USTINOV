@@ -4,10 +4,10 @@ using System;
 using UnityEngine;
 using Zenject;
 
-public class PopUpPresentationModel : IPopupPresentationModel
+public class PopUpPresentationModel : IPopupPresentationModel, IInitListner
 {
-    public event Action<bool> OnButtonStateChanged;
-    public event Action OnButtonClicked;
+    public event Action OnButtonLevelUpClick;
+    public event Action OnButtonCloseClick;
 
     private Lessons.Architecture.PM.CharacterInfo _characterInfo;  
     private PlayerLevel _playerLevel;
@@ -17,14 +17,19 @@ public class PopUpPresentationModel : IPopupPresentationModel
     private string _currentName;
     private string _currentDescription;
     private int _progress;
+    private bool _buttonInteractive;
 
-    public void Start()
+
+    void IInitListner.OnInit()
     {
+        Debug.Log("Init");
         _userInfo.OnDescriptionChanged += OnUserDescriptionChanged;
         _userInfo.OnNameChanged += OnUserNameChanged;
         _userInfo.OnIconChanged += OnAwatarChanged;
         _playerLevel.OnExperienceChanged += OnProgressChanged;
-        _playerLevel.OnLevelUp += OnLevelUp;
+
+        OnButtonLevelUpClick += _playerLevel.LevelUp;
+
     }
    
     [Inject]
@@ -33,18 +38,19 @@ public class PopUpPresentationModel : IPopupPresentationModel
         _characterInfo = characterInfo;
         _playerLevel = playerLevel;
         _userInfo = userInfo;
-
-        Start(); //убрать 
     }
 
-    private void OnLevelUp()
+    private void SetButtonState()
     {
-        OnButtonStateChanged?.Invoke(true);
+        if (_playerLevel.CanLevelUp())
+            _buttonInteractive = true;
+        else _buttonInteractive = false;
     }
 
     private void OnProgressChanged(int progress)
     {
         _progress = progress;
+        SetButtonState();
     }
     
 
@@ -80,10 +86,14 @@ public class PopUpPresentationModel : IPopupPresentationModel
         return _currentName;
     }
 
-    public void OnButtonLevelClicked()
+    public void OnButtonLevelUpClicked()
     {
-        OnButtonClicked?.Invoke();
-        Debug.Log("Кнопка уровень повышен нажата");
+        OnButtonLevelUpClick?.Invoke();        
+    }
+
+    public void OnButtonCloseClicked()
+    {
+        OnButtonCloseClick?.Invoke();
     }
 
 
@@ -100,14 +110,29 @@ public class PopUpPresentationModel : IPopupPresentationModel
         }
         return massData;
     }
-
-    public float GetProgress()
+    public int GetRequiredExperience()
+    {
+        return _playerLevel.RequiredExperience;
+    }
+    public int GetProgressValue()
     {
         return _progress;
+    }
+
+    public string GetProgressRewiew()
+    {
+        return "XP: " + _progress + " / " + GetRequiredExperience().ToString(); 
     }
 
     public string GetLevel()
     {
         return "Level: " + _playerLevel.CurrentLevel.ToString();
     }
+
+    public bool GetButtonState()
+    {
+        return _buttonInteractive;
+    }
+
+   
 }

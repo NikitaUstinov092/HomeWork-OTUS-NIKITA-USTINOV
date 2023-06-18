@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Lessons.Architecture.PM
 {
-    public sealed class UserInfo: MonoBehaviour
+    public sealed class UserInfo
     {
         public event Action<string> OnNameChanged;
         public event Action<string> OnDescriptionChanged;

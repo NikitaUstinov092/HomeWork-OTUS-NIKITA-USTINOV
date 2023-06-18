@@ -5,16 +5,19 @@ using Zenject;
 
 namespace Assets.HomeworksPM.Scripts.MySctripts
 {
-    public sealed class PopUpViewController : MonoBehaviour
+    public sealed class PopUpView : MonoBehaviour
     {
         #region UI elements
+
         [SerializeField] private TextMeshProUGUI _name;
         [SerializeField] private TextMeshProUGUI _level;
         [SerializeField] private TextMeshProUGUI _description;
-        
+        [SerializeField] private TextMeshProUGUI _progressReview;
+
         [SerializeField] private Image _awatar;
         [SerializeField] private Slider _progress;
         [SerializeField] private Button _levelUp;
+        [SerializeField] private Button _closePopUp;
 
         [SerializeField] private TextMeshProUGUI[] statsElements;
         
@@ -23,11 +26,11 @@ namespace Assets.HomeworksPM.Scripts.MySctripts
         private IPopupPresentationModel _pm;
 
         private void OnEnable()
-        {
+        {        
+            UpdateView();
             AddListners();
-            Show();
         }
-        private void OnDisable()
+        private void OnDestroy()
         {
             RemoveListners();
         }
@@ -38,27 +41,35 @@ namespace Assets.HomeworksPM.Scripts.MySctripts
             _pm = pm;
         }
 
-        private void Show()
+        public void UpdateView()
         {
+            if (_pm == null)
+                Debug.Log("PM null");
             _name.text = _pm.GetPlayerName();
             _level.text = _pm.GetLevel();
             _description.text = _pm.GetDescription();
             _awatar.sprite = _pm.GetAwatar();
-            _progress.value = _pm.GetProgress();
+           
+            _progress.maxValue = _pm.GetRequiredExperience();
+            _progress.value = _pm.GetProgressValue();
+            _progressReview.text = _pm.GetProgressRewiew();
 
-            UpdateStatsElements(_pm.GetStatsReview());       
+            OnButtonStateChanged(_pm.GetButtonState());
+            UpdateStatsElements(_pm.GetStatsReview());
         }
 
         private void AddListners()
         {
-            _pm.OnButtonStateChanged += OnButtonStateChanged;
             _levelUp.onClick.AddListener(() => OnButtonClicked());
+            _levelUp.onClick.AddListener(() => DestroyPopUp());
+            _closePopUp.onClick.AddListener(() => DestroyPopUp());
         }
 
         private void RemoveListners()
         {
-            _pm.OnButtonStateChanged -= OnButtonStateChanged;
             _levelUp.onClick.RemoveListener(() => OnButtonClicked());
+            _levelUp.onClick.RemoveListener(() => DestroyPopUp());
+            _closePopUp.onClick.RemoveListener(() => DestroyPopUp());
         }
 
 
@@ -77,12 +88,13 @@ namespace Assets.HomeworksPM.Scripts.MySctripts
 
         private void OnButtonClicked()
         {
-            _pm.OnButtonLevelClicked();
+            _pm.OnButtonLevelUpClicked();
         }
 
-
-
-
+        private void DestroyPopUp()
+        {
+            Destroy(gameObject);
+        }
 
     }
 }
