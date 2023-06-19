@@ -22,14 +22,12 @@ public class PopUpPresentationModel : IPopupPresentationModel, IInitListner
 
     void IInitListner.OnInit()
     {
-        Debug.Log("Init");
         _userInfo.OnDescriptionChanged += OnUserDescriptionChanged;
         _userInfo.OnNameChanged += OnUserNameChanged;
         _userInfo.OnIconChanged += OnAwatarChanged;
         _playerLevel.OnExperienceChanged += OnProgressChanged;
 
         OnButtonLevelUpClick += _playerLevel.LevelUp;
-
     }
    
     [Inject]

@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Lessons.Architecture.PM;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -20,7 +21,7 @@ namespace Assets.HomeworksPM.Scripts.MySctripts
         [SerializeField] private Button _closePopUp;
 
         [SerializeField] private TextMeshProUGUI[] statsElements;
-        
+
         #endregion
 
         private IPopupPresentationModel _pm;
@@ -36,15 +37,13 @@ namespace Assets.HomeworksPM.Scripts.MySctripts
         }
 
         [Inject]
-        private void Construct(IPopupPresentationModel pm)
+        public void Construct(IPopupPresentationModel pm)
         {
-            _pm = pm;
+            _pm = pm;           
         }
 
         public void UpdateView()
         {
-            if (_pm == null)
-                Debug.Log("PM null");
             _name.text = _pm.GetPlayerName();
             _level.text = _pm.GetLevel();
             _description.text = _pm.GetDescription();
