@@ -37,7 +37,7 @@ namespace Assets.HomeworksPM.Scripts.MySctripts
         }
 
         [Inject]
-        public void Construct(IPopupPresentationModel pm)
+        private void Construct(IPopupPresentationModel pm)
         {
             _pm = pm;           
         }
@@ -74,10 +74,8 @@ namespace Assets.HomeworksPM.Scripts.MySctripts
 
         private void UpdateStatsElements(string [] statsData)
         {
-            for(var i = 0; i < statsElements.Length; i++)
-            {
-                statsElements[i].text = statsData[i];
-            }
+            for(var i = 0; i < statsElements.Length; i++)         
+                statsElements[i].text = statsData[i];          
         }
 
         private void OnButtonStateChanged(bool isOn)

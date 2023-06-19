@@ -6,6 +6,8 @@ using Zenject;
 
 public class SetDataManager : MonoBehaviour, IInitListner, IDataSender
 {
+    public event Action OnDataSend;
+
     [SerializeField] private StatData[] _stats;
     [SerializeField] private string _name;
     [SerializeField] private string _description;
@@ -15,26 +17,19 @@ public class SetDataManager : MonoBehaviour, IInitListner, IDataSender
     private Lessons.Architecture.PM.CharacterInfo _characterInfo;
     private PlayerLevel _playerLevel;
     private UserInfo _userInfo;
-       
-    private const int _maxStatCount = 6;
-
-    public event Action OnDataSend;
-
-    private void Start()
+  
+    private const int _maxStatCount = 6; 
+    void IInitListner.OnInit()
     {
-        OnInit();
+        _stats = new StatData[_maxStatCount];     
     }
-    public void OnInit()
-    {
-        _stats = new StatData[_maxStatCount];
-    }
-
+  
     [Inject]
-    private void Constrcut(Lessons.Architecture.PM.CharacterInfo characterInfo, PlayerLevel playerLevel, UserInfo userInfo)
+    private void Construct(Lessons.Architecture.PM.CharacterInfo characterInfo, PlayerLevel playerLevel, UserInfo userInfo)
     {
         _characterInfo = characterInfo; 
         _playerLevel = playerLevel;
-        _userInfo = userInfo;   
+        _userInfo = userInfo;
     }
 
     private void OnValidate()
@@ -42,8 +37,6 @@ public class SetDataManager : MonoBehaviour, IInitListner, IDataSender
         if(_stats.Length > _maxStatCount) 
             Array.Resize(ref _stats, _maxStatCount);        
     }
-
-
     private void Submit()
     {
         _userInfo.ChangeName(_name);
@@ -66,7 +59,6 @@ public class SetDataManager : MonoBehaviour, IInitListner, IDataSender
         Submit();
         OnDataSend?.Invoke();
     }
-
     private bool CheckDataNotEmpty()
     {
         if(_name == string.Empty)
@@ -95,6 +87,16 @@ public class SetDataManager : MonoBehaviour, IInitListner, IDataSender
         }
         return true;
     }
+    private void ClearAllData()
+    { 
+         _name = string.Empty;
+         _description = string.Empty;
+         _icon = null;
+         _expirience = 0;
+
+        _stats = new StatData[_maxStatCount];
+    }
+
 }
 
 

@@ -1,5 +1,4 @@
 using Assets.HomeworksPM.Scripts.MySctripts;
-using System.ComponentModel;
 using UnityEngine;
 using Zenject;
 
@@ -7,17 +6,19 @@ public class PopUpStateManager : MonoBehaviour, IInitListner, IDisableListner
 {
     [SerializeField] private GameObject _prefab;
     [SerializeField] private Transform _parent;
-
+    
+    private DiContainer _container;
     private IPopupPresentationModel _pm;
     private IDataSender _dataSender;
 
-    private GameObject _popUp;
-
+    private PopUpView _popUp;
+   
     [Inject]
-    private void Construct(IPopupPresentationModel pm, IDataSender dataSender)
+    private void Construct(DiContainer container)
     {
-        _pm = pm;
-        _dataSender = dataSender;
+        _container = container;
+        _pm = _container.Resolve<IPopupPresentationModel>();
+        _dataSender = _container.Resolve<IDataSender>();
     }
     void IInitListner.OnInit()
     {
@@ -32,7 +33,7 @@ public class PopUpStateManager : MonoBehaviour, IInitListner, IDisableListner
     }
     private void InstatiatePopUp()
     {
-        _popUp = Instantiate(_prefab, _parent);       
+        _popUp = _container.InstantiatePrefabForComponent<PopUpView>(_prefab, _parent);
     }
 
     private void DestroyPopUp()

@@ -4,7 +4,7 @@ using System;
 using UnityEngine;
 using Zenject;
 
-public class PopUpPresentationModel : IPopupPresentationModel, IInitListner
+public class PopUpPresentationModel : IPopupPresentationModel, IInitListner, IDisableListner
 {
     public event Action OnButtonLevelUpClick;
     public event Action OnButtonCloseClick;
@@ -29,7 +29,16 @@ public class PopUpPresentationModel : IPopupPresentationModel, IInitListner
 
         OnButtonLevelUpClick += _playerLevel.LevelUp;
     }
-   
+    void IDisableListner.Disable()
+    {
+        _userInfo.OnDescriptionChanged -= OnUserDescriptionChanged;
+        _userInfo.OnNameChanged -= OnUserNameChanged;
+        _userInfo.OnIconChanged -= OnAwatarChanged;
+        _playerLevel.OnExperienceChanged -= OnProgressChanged;
+
+        OnButtonLevelUpClick -= _playerLevel.LevelUp;
+    }
+
     [Inject]
     private void Construct(Lessons.Architecture.PM.CharacterInfo characterInfo, PlayerLevel playerLevel, UserInfo userInfo)
     {
@@ -132,5 +141,4 @@ public class PopUpPresentationModel : IPopupPresentationModel, IInitListner
         return _buttonInteractive;
     }
 
-   
 }
