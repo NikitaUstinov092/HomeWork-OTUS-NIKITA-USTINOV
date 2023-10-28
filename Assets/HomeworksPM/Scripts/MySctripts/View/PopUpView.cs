@@ -29,11 +29,11 @@ namespace Assets.HomeworksPM.Scripts.MySctripts
         private void OnEnable()
         {        
             UpdateView();
-            AddListners();
+            AddListeners();
         }
         private void OnDestroy()
         {
-            RemoveListners();
+            RemoveListeners();
         }
 
         [Inject]
@@ -41,57 +41,48 @@ namespace Assets.HomeworksPM.Scripts.MySctripts
         {
             _pm = pm;           
         }
-
-        public void UpdateView()
+        private void UpdateView()
         {
             _name.text = _pm.GetPlayerName();
             _level.text = _pm.GetLevel();
             _description.text = _pm.GetDescription();
-            _awatar.sprite = _pm.GetAwatar();
+            _awatar.sprite = _pm.GetAvatar();
            
             _progress.maxValue = _pm.GetRequiredExperience();
             _progress.value = _pm.GetProgressValue();
-            _progressReview.text = _pm.GetProgressRewiew();
+            _progressReview.text = _pm.GetProgressReview();
 
             OnButtonStateChanged(_pm.GetButtonState());
             UpdateStatsElements(_pm.GetStatsReview());
         }
-
-        private void AddListners()
+        private void AddListeners()
         {
             _levelUp.onClick.AddListener(() => OnButtonClicked());
             _levelUp.onClick.AddListener(() => DestroyPopUp());
             _closePopUp.onClick.AddListener(() => DestroyPopUp());
         }
-
-        private void RemoveListners()
+        private void RemoveListeners()
         {
             _levelUp.onClick.RemoveListener(() => OnButtonClicked());
             _levelUp.onClick.RemoveListener(() => DestroyPopUp());
             _closePopUp.onClick.RemoveListener(() => DestroyPopUp());
         }
-
-
         private void UpdateStatsElements(string [] statsData)
         {
             for(var i = 0; i < statsElements.Length; i++)         
                 statsElements[i].text = statsData[i];          
         }
-
         private void OnButtonStateChanged(bool isOn)
         {
             _levelUp.interactable = isOn;
         }
-
         private void OnButtonClicked()
         {
             _pm.OnButtonLevelUpClicked();
         }
-
         private void DestroyPopUp()
         {
             Destroy(gameObject);
         }
-
     }
 }

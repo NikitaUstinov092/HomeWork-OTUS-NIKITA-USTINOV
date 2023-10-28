@@ -6,25 +6,19 @@ using Zenject;
 
 public class PopUpPresentationModel : IPopupPresentationModel, IInitListner, IDisableListner
 {
+    public event Action OnModelStateChanged;
     public event Action OnButtonLevelUpClick;
     public event Action OnButtonCloseClick;
 
     private Lessons.Architecture.PM.CharacterInfo _characterInfo;  
     private PlayerLevel _playerLevel;
     private UserInfo _userInfo;
-
-    private Sprite _currentUserAwatar;
-    private string _currentName;
-    private string _currentDescription;
-    private int _progress;
-    private bool _buttonInteractive;
-
-
+    
     void IInitListner.OnInit()
     {
         _userInfo.OnDescriptionChanged += OnUserDescriptionChanged;
         _userInfo.OnNameChanged += OnUserNameChanged;
-        _userInfo.OnIconChanged += OnAwatarChanged;
+        _userInfo.OnIconChanged += OnAvatarChanged;
         _playerLevel.OnExperienceChanged += OnProgressChanged;
 
         OnButtonLevelUpClick += _playerLevel.LevelUp;
@@ -33,7 +27,7 @@ public class PopUpPresentationModel : IPopupPresentationModel, IInitListner, IDi
     {
         _userInfo.OnDescriptionChanged -= OnUserDescriptionChanged;
         _userInfo.OnNameChanged -= OnUserNameChanged;
-        _userInfo.OnIconChanged -= OnAwatarChanged;
+        _userInfo.OnIconChanged -= OnAvatarChanged;
         _playerLevel.OnExperienceChanged -= OnProgressChanged;
 
         OnButtonLevelUpClick -= _playerLevel.LevelUp;
@@ -46,64 +40,42 @@ public class PopUpPresentationModel : IPopupPresentationModel, IInitListner, IDi
         _playerLevel = playerLevel;
         _userInfo = userInfo;
     }
-
-    private void SetButtonState()
+    private void OnProgressChanged(int value)
     {
-        if (_playerLevel.CanLevelUp())
-            _buttonInteractive = true;
-        else _buttonInteractive = false;
+        OnModelStateChanged?.Invoke();
     }
-
-    private void OnProgressChanged(int progress)
+    private void OnAvatarChanged(Sprite avatar)
     {
-        _progress = progress;
-        SetButtonState();
+        OnModelStateChanged?.Invoke();
     }
-    
-
-    private void OnAwatarChanged(Sprite awatar)
-    {
-        _currentUserAwatar = awatar;
-    }
-
     private void OnUserNameChanged(string name)
     {
-        _currentName = name;
+        OnModelStateChanged?.Invoke();
     }
-
     private void OnUserDescriptionChanged(string description)
     {
-        _currentDescription = description;
+        OnModelStateChanged?.Invoke();
     }
-
-
-    public Sprite GetAwatar()
+    public Sprite GetAvatar()
     {
-        return _currentUserAwatar;
+        return _userInfo.Icon;
     }
-
-   
     public string GetDescription()
     {
-        return _currentDescription;
+        return _userInfo.Description;
     }
-
     public string GetPlayerName()
     {
-        return _currentName;
+        return _userInfo.Name;
     }
-
     public void OnButtonLevelUpClicked()
     {
-        OnButtonLevelUpClick?.Invoke();        
+        _playerLevel.LevelUp();
     }
-
     public void OnButtonCloseClicked()
     {
         OnButtonCloseClick?.Invoke();
     }
-
-
     public string[] GetStatsReview()
     {
         var massData = new string[6];
@@ -123,22 +95,21 @@ public class PopUpPresentationModel : IPopupPresentationModel, IInitListner, IDi
     }
     public int GetProgressValue()
     {
-        return _progress;
+        return _playerLevel.CurrentExperience;
     }
 
-    public string GetProgressRewiew()
+    public string GetProgressReview()
     {
-        return "XP: " + _progress + " / " + GetRequiredExperience().ToString(); 
+        return $"XP: {_playerLevel.CurrentExperience} / {GetRequiredExperience()}"; 
     }
 
     public string GetLevel()
     {
-        return "Level: " + _playerLevel.CurrentLevel.ToString();
+        return $"Level: {_playerLevel.CurrentLevel}";
     }
 
     public bool GetButtonState()
     {
-        return _buttonInteractive;
+        return _playerLevel.CanLevelUp();
     }
-
 }

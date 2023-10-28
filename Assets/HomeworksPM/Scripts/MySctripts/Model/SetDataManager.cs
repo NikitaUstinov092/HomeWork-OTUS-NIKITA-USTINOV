@@ -63,17 +63,17 @@ public class SetDataManager : MonoBehaviour, IInitListner, IDataSender
     {
         if(_name == string.Empty)
         {
-            Debug.LogError("Имя не заполнено");
+            Debug.LogError("РРјСЏ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ");
             return false;
         }
         if (_description == string.Empty)
         {
-            Debug.LogError("Описание не заполнено");
+            Debug.LogError("РћРїРёСЃР°РЅРёРµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ");
             return false;
         }
         if (_icon == null)
         {
-            Debug.LogError("Иконка не заполнена");
+            Debug.LogError("РРєРѕРЅРєР° РЅРµ Р·Р°РїРѕР»РЅРµРЅР°");
             return false;
         } 
 
@@ -81,7 +81,7 @@ public class SetDataManager : MonoBehaviour, IInitListner, IDataSender
         {
             if (data == null || data.Name == string.Empty) 
             {
-                Debug.LogError("Некоторые данные статистики не заполнены");
+                Debug.LogError("РќРµРєРѕС‚РѕСЂС‹Рµ РґР°РЅРЅС‹Рµ СЃС‚Р°С‚РёСЃС‚РёРєРё РЅРµ Р·Р°РїРѕР»РЅРµРЅС‹");
                 return false;
             }
         }
