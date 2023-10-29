@@ -2,18 +2,15 @@ public interface IGameListener
 {
 
 }
-
-public interface IStartListner : IGameListener
+public interface IStartListener : IGameListener
 {
     void Start();
 }
-
-public interface IInitListner : IGameListener
+public interface IInitListener : IGameListener
 {
     void OnInit();
 }
-
-public interface IDisableListner : IGameListener
+public interface IDisableListener : IGameListener
 {
     void Disable();
 }

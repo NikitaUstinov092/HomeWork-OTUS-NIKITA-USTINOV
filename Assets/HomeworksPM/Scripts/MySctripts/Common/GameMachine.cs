@@ -9,7 +9,7 @@ public class GameMachine : MonoBehaviour
 
     private void Start()
     {
-        foreach(var listner in _container.Resolve<IEnumerable<IInitListner>>())
+        foreach(var listner in _container.Resolve<IEnumerable<IInitListener>>())
         {
             listner.OnInit();
         }
@@ -17,7 +17,7 @@ public class GameMachine : MonoBehaviour
 
     private void OnDisable()
     {
-        foreach (var listner in _container.Resolve<IEnumerable<IDisableListner>>())
+        foreach (var listner in _container.Resolve<IEnumerable<IDisableListener>>())
         {
             listner.Disable();
         }

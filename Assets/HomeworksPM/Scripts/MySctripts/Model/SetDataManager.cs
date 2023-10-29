@@ -4,24 +4,33 @@ using System;
 using UnityEngine;
 using Zenject;
 
-public class SetDataManager : MonoBehaviour, IInitListner, IDataSender
+public class SetDataManager : MonoBehaviour, IInitListener, IDataSender
 {
     public event Action OnDataSend;
 
-    [SerializeField] private StatData[] _stats;
-    [SerializeField] private string _name;
-    [SerializeField] private string _description;
-    [SerializeField] private Sprite _icon;
-    [SerializeField] private int _expirience;
+    [SerializeField] 
+    private StatData[] _stats;
+    
+    [SerializeField] 
+    private string _name;
+    
+    [SerializeField] 
+    private string _description;
+    
+    [SerializeField] 
+    private Sprite _icon;
+    
+    [SerializeField] 
+    private int _expirience;
 
     private Lessons.Architecture.PM.CharacterInfo _characterInfo;
     private PlayerLevel _playerLevel;
     private UserInfo _userInfo;
   
-    private const int _maxStatCount = 6; 
-    void IInitListner.OnInit()
+    private const int MaxStatCount = 6; 
+    void IInitListener.OnInit()
     {
-        _stats = new StatData[_maxStatCount];     
+        _stats = new StatData[MaxStatCount];     
     }
   
     [Inject]
@@ -31,11 +40,10 @@ public class SetDataManager : MonoBehaviour, IInitListner, IDataSender
         _playerLevel = playerLevel;
         _userInfo = userInfo;
     }
-
     private void OnValidate()
     {
-        if(_stats.Length > _maxStatCount) 
-            Array.Resize(ref _stats, _maxStatCount);        
+        if(_stats.Length > MaxStatCount) 
+            Array.Resize(ref _stats, MaxStatCount);        
     }
     private void Submit()
     {
@@ -44,15 +52,16 @@ public class SetDataManager : MonoBehaviour, IInitListner, IDataSender
         _userInfo.ChangeIcon(_icon);
         _playerLevel.AddExperience(_expirience);
 
-        for(var i = 0; i < _stats.Length; i++)
+        _characterInfo.ClearStat();
+        foreach (var t in _stats)
         {
-            var stat = new CharacterStat(_stats[i].Name, _stats[i].Value);
+            var stat = new CharacterStat(t.Name, t.Value);
             _characterInfo.AddStat(stat);
         }
     }
 
     [Button]
-    public void OpenPopUp()
+    public void SubmitData()
     {
         if (!CheckDataNotEmpty())
             return;
@@ -75,28 +84,17 @@ public class SetDataManager : MonoBehaviour, IInitListner, IDataSender
         {
             Debug.LogError("Иконка не заполнена");
             return false;
-        } 
-
-        foreach (var data in _stats) 
+        }
+        var index = 0;
+        for (; index < _stats.Length; index++)
         {
-            if (data == null || data.Name == string.Empty) 
-            {
-                Debug.LogError("Некоторые данные статистики не заполнены");
-                return false;
-            }
+            var data = _stats[index];
+            if (data != null && data.Name != string.Empty) continue;
+            Debug.LogError("Некоторые данные статистики не заполнены");
+            return false;
         }
         return true;
     }
-    private void ClearAllData()
-    { 
-         _name = string.Empty;
-         _description = string.Empty;
-         _icon = null;
-         _expirience = 0;
-
-        _stats = new StatData[_maxStatCount];
-    }
-
 }
 
 

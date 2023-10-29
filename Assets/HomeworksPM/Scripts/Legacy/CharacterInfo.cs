@@ -34,12 +34,9 @@ namespace Lessons.Architecture.PM
 
         public CharacterStat GetStat(string name)
         {
-            foreach (var stat in stats)
+            foreach (var stat in stats.Where(stat => stat.Name == name))
             {
-                if (stat.Name == name)
-                {
-                    return stat;
-                }
+                return stat;
             }
 
             throw new Exception($"Stat {name} is not found!");
@@ -48,6 +45,11 @@ namespace Lessons.Architecture.PM
         public CharacterStat[] GetStats()
         {
             return stats.ToArray();
+        }
+
+        public void ClearStat()
+        {
+            stats.Clear();
         }
     }
 }

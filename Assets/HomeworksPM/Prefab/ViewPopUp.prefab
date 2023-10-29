@@ -1033,7 +1033,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8716013842415135700}
-  - component: {fileID: 8716013842415135691}
+  - component: {fileID: 1688850568068346635}
+  - component: {fileID: 6864815746656948813}
+  - component: {fileID: -1173665369641861066}
+  - component: {fileID: 7058072982750973904}
   m_Layer: 5
   m_Name: ViewPopUp
   m_TagString: Untagged
@@ -1062,7 +1065,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -1820, y: -804}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &8716013842415135691
+--- !u!114 &1688850568068346635
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1071,17 +1074,54 @@ MonoBehaviour:
   m_GameObject: {fileID: 8716013842415135701}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08238b12127373847948485417adfbbe, type: 3}
+  m_Script: {fileID: 11500000, guid: e1325facd44b4ef438300a5a16cf04dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _levelUp: {fileID: 3702827615899681244}
+  _closePopUp: {fileID: 3702827615725583582}
+--- !u!114 &6864815746656948813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8716013842415135701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5f15ebfcfd91b44bbd54ea93b600af7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _level: {fileID: 8716013842598602674}
+  _progressReview: {fileID: 3702827616330366464}
+  _buttonLevelUp: {fileID: 3702827615899681244}
+  _progress: {fileID: 3702827616463305012}
+--- !u!114 &-1173665369641861066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8716013842415135701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e14c57dbb591b74494c3e48b9e00dc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _name: {fileID: 8716013844044450522}
-  _level: {fileID: 8716013842598602674}
   _description: {fileID: 8716013842739896724}
-  _progressReview: {fileID: 3702827616330366464}
-  _awatar: {fileID: 8716013843248583909}
-  _progress: {fileID: 3702827616463305012}
-  _levelUp: {fileID: 3702827615899681244}
-  _closePopUp: {fileID: 3702827615725583582}
+  _avatar: {fileID: 8716013843248583909}
+--- !u!114 &7058072982750973904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8716013842415135701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 288e3032f679ada44a1da51ec48e3678, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   statsElements:
   - {fileID: 8716013843406883842}
   - {fileID: 8716013843069128277}
